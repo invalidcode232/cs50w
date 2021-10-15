@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing: {{ listing.name }}</h2>
+
+    <img src="{{ listing.image_url }}" class="item-main-preview">
+    <br>
+
+    <h4>{{ listing.description }}</h4>
+    <h3>${{ listing.price }}</h3>
+
+    <form method="post">
+        <span>{{ listing.bids }} bid(s) so far. Your bid is the current bid</span>
+
+        <div class="form-group">
+            <input type="number" class="form-control" name="bid" placeholder="Bid">
+        </div>
+        <button class="btn btn-primary">Place bid</button>
+    </form>
+
+{% endblock %}
