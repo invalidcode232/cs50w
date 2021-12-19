@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Counter</title>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                let counter = 0;
+
+                // Increase counter inner text by one
+                document.querySelector("#increase").onclick = () => {
+                    counter++;
+                    document.querySelector("#counter").innerText = counter;
+                };
+
+                // Decrease counter inner text by one
+                document.querySelector("#decrease").onclick = () => {
+                    counter--;
+                    document.querySelector("#counter").innerText = counter;
+                };
+            })
+        </script>
+    </head>
+    <body>
+        <h1 id="counter">0</h1>
+        <button id="increase">+</button>
+        <button id="decrease">-</button>
+    </body>
+</html>

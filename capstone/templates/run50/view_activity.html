@@ -1,0 +1,24 @@
+{% extends 'run50/layout.html' %}
+
+{% block body %}
+<div class="container">
+    <h2>{{ activity }}</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <b>Activity details</b>
+            <ul>
+{#                <li>Pace: {{ activity.pace }}</li>#}
+                <li>Distance: {{ activity.distance }}</li>
+                <li>Duration: {{ activity.duration }}</li>
+                <li>Elevation: {{ activity.elevation }}</li>
+                <li>Start: {{ activity.time }}</li>
+            </ul>
+
+            {% if activity.user == request.user %}
+                <a class="btn btn-primary" href="{% url 'edit_activity' activity.id %}">Edit</a>
+                <a class="btn btn-danger" href="{% url 'delete_activity' activity.id %}">Delete</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'run50/layout.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Edit Activity</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form }}
+{#                <div class="form-group">#}
+{#                    <label for="distance">Distance</label>#}
+{#                    <input type="text" class="form-control" id="distance" name="distance" value="{{ activity.distance }}">#}
+{#                </div>#}
+{#                <div class="form-group">#}
+{#                    <label for="duration">Duration</label>#}
+{#                    <input type="text" class="form-control" id="duration" name="duration" value="{{ activity.duration }}">#}
+{#                </div>#}
+{#                <div class="form-group">#}
+{#                    <label for="date">Date</label>#}
+{#                    <input type="date" class="form-control" id="date" name="date" value="{{ activity.date }}">#}
+{#                </div>#}
+{#                <div class="form-group">#}
+{#                    <label for="time">Time</label>#}
+{#                    <input type="time" class="form-control" id="time" name="time" value="{{ activity.time }}">#}
+{#                </div>#}
+                <br>
+                <button class="btn btn-primary" type="submit">Edit</button>
+                <a class="btn btn-outline-secondary" href="{% url 'view_activity' activity.id %}">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

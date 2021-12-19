@@ -1,0 +1,4 @@
+1. Form buat activity
+2. Display activity (Followers and you)
+3. Statistik activity
+4. Follow unfollow

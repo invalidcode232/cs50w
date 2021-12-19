@@ -1,0 +1,220 @@
+{% extends 'run50/layout.html' %}
+{% block body %}
+    <div class="container">
+        <div>
+            {% if show_profile is True %}
+                <div class="d-flex">
+                    <h2 class="me-auto">{{ user.username }}</h2>
+                    <button class="btn btn-primary">Follow</button>
+                </div>
+                <div class="text-secondary"><i class="fa fa-user-alt" style="margin-right: 3px;"></i> 76 Followers</div>
+                <br>
+                <hr>
+            {% endif %}
+            {% if show_stats is True %}
+                <h4 class="d-inline-block" style="margin-right: 10px;">Stats</h4>
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="?filter=week">Weekly</a></li>
+                        <li><a class="dropdown-item" href="?filter=month">Monthly</a></li>
+                        <li><a class="dropdown-item" href="?filter=year">Yearly</a></li>
+                        <li><a class="dropdown-item" href="?filter=alltime">All time</a></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h5 class="card-title">Runs</h5>
+                                <div class="card-text">
+                                    You have done
+                                    <h1>{{ stats.num_activities }} run(s)</h1>
+                                    {% if request.session.filter_by != 'alltime' %}
+                                        this <b>{{ request.session.filter_by }}</b>.
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <h5 class="card-title">Distance</h5>
+                                <div class="card-text">
+                                    You have run
+                                    <div class="d-inline">
+                                        <h1>{{ stats.distance }} km</h1>
+                                        {% if request.session.filter_by != 'alltime' %}
+                                            this <b>{{ request.session.filter_by }}</b>.
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <h5 class="card-title">Pace</h5>
+                                <div class="card-text">
+                                    You have an average pace of
+                                    <div class="d-inline">
+                                        <h1>{{ pace_min }} min {{ pace_sec }} secs</h1>
+                                        {% if request.session.filter_by != 'alltime' %}
+                                            this <b>{{ request.session.filter_by }}</b>.
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <h4>Performance</h4>
+                <canvas id="stats-chart" style="height:5vh; width: 15vw; position: relative;"></canvas>
+                <br>
+            {% endif %}
+
+
+            <div class="d-flex">
+                <h4 class="me-auto">Activities</h4>
+
+                {% if create_activity is True %}
+                    <button data-bs-toggle="modal" data-bs-target="#add-activity" class="btn btn-primary"><i
+                            class="fa fa-plus"></i></button>
+                    <div class="modal fade" id="add-activity">
+                        <div class="modal-dialog scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Add Activity</h4>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">&times</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{% url 'index' %}" method="post">
+                                        {% csrf_token %}
+                                        {{ activity_form }}
+                                        <br>
+                                        <button type="submit" class="btn btn-primary">Add</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        {% if show_profile and activities|length == 0 %}
+            <p class="text-muted">User has either no activity or has privated their activity history</p>
+        {% endif %}
+
+        {% for activity in page_obj %}
+            <div class="card" style="width: 60rem;">
+                <div class="card-body">
+                    <h5 class="card-title d-inline-block" style="margin-right: 15px;">{{ activity }}</h5>
+                    <a href="{% url 'view_activity' activity.id %}" class="btn btn-outline-secondary btn-sm">Details</a>
+                    {% if activity.image %}
+                        <div class="card-image">
+                            <img src="{{ activity.image.url }}" alt="{{ activity.image.name }}">
+                        </div>
+                    {% endif %}
+                    <div class="card-text" style="margin-top: 10px;">
+                        <div class="row">
+                            <div class="col-4">Distance: <b>{{ activity.distance }}</b> km</div>
+                            {#                            <div class="col">Time: <b>{{ activity.time }}</b></div>#}
+                            <div class="col-4">Duration: <b>{{ activity.duration }}</b> minutes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <br>
+
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+                {% for page in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == page %}active{% endif %}">
+                        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        let activities = JSON.parse("{{ activities_json|escapejs }}");
+
+        let date_labels = [];
+        let distance_data = [];
+
+        let filter_by = "{{ filter_by }}"
+
+        let today = new Date();
+
+        let start_date, loop;
+        if (filter_by === "week") {
+            start_date = today.getDate()
+            loop = 6;
+        }
+        else if (filter_by === "month") {
+            start_date = 30;
+            loop = 30;
+        }
+
+        // Loop from last week to today
+        for (let i = loop; i >= 0; i--) {
+            let date = new Date(today.getFullYear(), today.getMonth(), start_date - i + 1);
+            let date_str = date.toISOString().split('T')[0];
+
+            let activities_on_date = activities.filter(activity => activity.fields.date === date_str);
+
+            date_labels.push(date_str);
+
+            if (activities_on_date.length > 0) {
+                distance_data.push(activities_on_date[0].fields.distance);
+            }
+            else {
+                distance_data.push(0);
+            }
+        }
+
+        const data = {
+            labels: date_labels,
+            datasets: [
+                {
+                    label: 'Distance',
+                    data: distance_data,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }
+            ]
+        };
+
+        const options = {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        };
+
+        console.log(distance_data)
+        console.log(date_labels)
+
+        new Chart(document.getElementById('stats-chart'), {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+    </script>
+{% endblock %}

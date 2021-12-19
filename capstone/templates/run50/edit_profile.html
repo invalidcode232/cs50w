@@ -1,0 +1,15 @@
+{% extends 'run50/layout.html' %}
+
+{% block body %}
+    <div class="container">
+        <h3>Edit Profile</h3>
+        <br>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <br>
+            <br>
+            <button type="submit" class="btn btn-primary">Edit</button>
+        </form>
+    </div>
+{% endblock %}
