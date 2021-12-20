@@ -323,6 +323,11 @@ def discover(request):
 def follow(request, user_id):
     user = User.objects.get(id=user_id)
 
+    # is_following = User.objects.filter(
+    #     followers=request.user,
+    #     user=user
+    # ).exists()
+
     if request.user != user:
         Follower.objects.create(user=user, follower=request.user)
 
@@ -349,9 +354,9 @@ def feed(request):
     # Paginate activities
     paginator = Paginator(activities, PAGINATE_BY)
     page_number = request.GET.get("page")
-    page_obj = pagina
-    return render(request, 'run50/intor.get_page(page_number)
-dex.html', {
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'run50/index.html', {
         'activities': activities,
         'page_obj': page_obj,
     })
