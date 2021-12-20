@@ -1,3 +1,4 @@
+import calendar
 import json
 
 from django.contrib.auth import authenticate, login, logout
@@ -6,7 +7,7 @@ from django.core import serializers
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import IntegrityError
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -17,7 +18,7 @@ import simplejson
 from .models import *
 from .forms import *
 
-PAGINATE_BY = 5
+PAGINATE_BY = 4
 
 
 # Create your views here.
@@ -51,13 +52,17 @@ def index(request):
             request.session['filter_by'] = filter_by
 
         if request.session['filter_by'] == "month":
-            activities = Activity.objects.filter(user=request.user).filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
+            # Get activity from this month and sort it by date descending
+            activities = Activity.objects.filter(user=request.user, date__month=datetime.date.today().month).order_by('-date')
+            # activities = Activity.objects.filter(user=request.user).filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
         elif request.session['filter_by'] == "year":
-            activities = Activity.objects.filter(user=request.user).filter(date__gte=datetime.date.today() - datetime.timedelta(days=365))
+            # Get activity from this year
+            activities = Activity.objects.filter(user=request.user, date__year=datetime.date.today().year).order_by('-date')
+            # activities = Activity.objects.filter(user=request.user).filter(date__gte=datetime.date.today() - datetime.timedelta(days=365))
         elif request.session['filter_by'] == "alltime":
-            activities = Activity.objects.filter(user=request.user)
+            activities = Activity.objects.filter(user=request.user).order_by('-date')
         else:
-            activities = Activity.objects.filter(user=request.user).filter(date__gte=datetime.date.today() - datetime.timedelta(days=7))
+            activities = Activity.objects.filter(user=request.user).filter(date__gte=datetime.date.today() - datetime.timedelta(days=7)).order_by('-date')
 
         # Get sum of distance
         distance = activities.aggregate(Sum('distance'))['distance__sum']
@@ -77,8 +82,6 @@ def index(request):
 
         # Convert activities to json template for chart
         activities_json = serializers.serialize('json', activities)
-
-        print(activities_json)
 
         # Get decimal point of pace and convert it to seconds
         frac, whole = math.modf(pace_avg)
@@ -184,12 +187,20 @@ def profile(request, user_id):
     page_obj = paginator.get_page(page_number)
 
     # TODO: Display follower count after follower function is added
+    # Get follower count
+    followers_count = Follower.objects.filter(user=user).count()
+
+    # Check if user is following
+    is_following = Follower.objects.filter(user=user, follower=request.user).count()
+    print(is_following)
 
     return render(request, 'run50/index.html', {
         'user': user,
         'show_profile': True,
         'activities': activities,
-        'page_obj': page_obj
+        'page_obj': page_obj,
+        'followers_count': followers_count,
+        'is_following': is_following,
     })
 
 
@@ -207,7 +218,6 @@ def edit_profile(request):
             profile_picture = request.FILES.get("profile_picture")
             if profile_picture:
                 user.profile_picture = profile_picture
-            # print(profile_picture)
 
             # TODO: Uncomment this
             share_preference = 0
@@ -288,3 +298,92 @@ def delete_activity(request, activity_id):
 
     activity.delete()
     return HttpResponseRedirect(reverse("index"))
+
+
+@login_required(login_url='/login')
+def discover(request):
+    # Get users with recent activities in the last two weeks that is not the current user
+    users = User.objects.exclude(username=request.user.username).filter(
+        activity__date__gte=datetime.date.today() - datetime.timedelta(days=14),
+        share_preference=0,
+    ).distinct()
+
+    # Paginate users
+    paginator = Paginator(users, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'run50/discover.html', {
+        'users': users,
+        'page_obj': page_obj,
+    })
+
+
+@login_required(login_url='/login')
+def follow(request, user_id):
+    user = User.objects.get(id=user_id)
+
+    if request.user != user:
+        Follower.objects.create(user=user, follower=request.user)
+
+    return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+
+
+@login_required(login_url='/login')
+def unfollow(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.user != user:
+        Follower.objects.filter(user=user, follower=request.user).delete()
+
+    return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+
+
+@login_required(login_url='/login')
+def feed(request):
+    # Get activities from the current user and the users that the current user is following
+    activities = Activity.objects.filter(
+        Q(user=request.user) |
+        Q(user__in=Follower.objects.filter(follower=request.user).values_list('user', flat=True))
+    ).order_by('-date')
+
+    # Paginate activities
+    paginator = Paginator(activities, PAGINATE_BY)
+    page_number = request.GET.get("page")
+    page_obj = pagina
+    return render(request, 'run50/intor.get_page(page_number)
+dex.html', {
+        'activities': activities,
+        'page_obj': page_obj,
+    })
+
+
+@login_required(login_url='/login')
+def leaderboard(request):
+    if 'filter' in request.GET:
+        request.session['filter'] = request.GET['filter']
+    else:
+        request.session['filter'] = datetime.datetime.now().month
+
+    # Get the last date of the month
+    last_day = calendar.monthrange(datetime.datetime.now().year, int(request.session['filter']))[1]
+
+    # Get users with their total distance in the current month
+    users = User.objects.filter(
+        activity__date__gte=datetime.date.today().replace(day=1, month=int(request.session['filter'])),
+        # activity__date__gte=datetime.date.today() - datetime.timedelta(days=30),
+        activity__date__lte=datetime.date.today().replace(day=last_day, month=int(request.session['filter'])),
+        activity__distance__isnull=False,
+        activity__distance__gt=0,
+    ).annotate(
+        total_distance=Sum('activity__distance'),
+    ).order_by('-total_distance')
+
+    # Get months name for the dropdown
+    months = []
+    for month in range(1, 13):
+        months.append(datetime.date.today().replace(month=month).strftime("%B"))
+
+    return render(request, 'run50/leaderboard.html', {
+        'users': users,
+        'months': months,
+    })

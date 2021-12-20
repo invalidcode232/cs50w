@@ -1,0 +1,105 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <!-- Display a card that has a header, and a text area input in its body -->
+    <div class="card">
+        <div class="card-header">
+            <h3>All posts</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <h3>New post</h3>
+                    <div class="form-group">
+                        <textarea name="content" class="form-control w-50"></textarea>
+                    </div>
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+
+    <!-- Display all posts -->
+    {% for post in page_obj %}
+        <div class="card">
+            <div class="card-header">
+                <a class="h4" href="profile/{{ post.user.id }}">{{ post.user }}</a>
+            </div>
+            <div class="card-body">
+                <p>{{ post.content }}</p>
+                <p class="text-muted">{{ post.created_at }}</p>
+                {% if user != post.user %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="text" hidden value="{{ post.id }}" name="post_id">
+                        {% if user in post.like.all %}
+                            <button type="submit" name="unlike" class="transparent-btn" style="color: red;"><i class="fa fa-heart"></i></button>
+                        {% else %}
+                            <button type="submit" name="like" class="transparent-btn text-muted"><i class="fa fa-heart"></i></button>
+                        {% endif %}
+                        <span class="text-muted">{{ post.like.count }}</span>
+                    </form>
+                {% else %}
+                    <form method="post" style="display: none" id="edit-form-{{ post.id }}">
+                        {% csrf_token %}
+                        <input type="text" hidden name="edit">
+                        <input type="text" hidden value="{{ post.id }}" name="post_id">
+
+                        <div class="form-group">
+                            <textarea class="form-control" name="content">{{ post.content }}</textarea>
+                        </div>
+                    </form>
+
+                    <button type="button" class="transparent-btn text-muted edit-btn" data-post-id="{{ post.id }}">Edit</button>
+                    <button type="button" class="btn btn-danger cancel-btn" style="display: none;" id="cancel-btn-{{ post.id }}" data-post-id="{{ post.id }}">Cancel</button>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    <nav>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+            {% for page in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == page %}active{% endif %}">
+                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <script>
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                let id = btn.getAttribute('data-post-id');
+                let form = document.getElementById('edit-form-' + id);
+                if (form.style.display === 'none') {
+                    form.style.display = 'block';
+                    document.getElementById('cancel-btn-' + id).style.display = 'block';
+                }
+                else {
+                    form.submit();
+                }
+            });
+        });
+
+        document.querySelectorAll(".cancel-btn").forEach(btn => {
+            btn.addEventListener('click', () => {
+                let id = btn.getAttribute('data-post-id');
+                let form = document.getElementById('edit-form-' + id);
+                form.style.display = 'none';
+                btn.style.display = 'none';
+            });
+        });
+    </script>
+{% endblock %}

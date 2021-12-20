@@ -5,9 +5,15 @@
             {% if show_profile is True %}
                 <div class="d-flex">
                     <h2 class="me-auto">{{ user.username }}</h2>
-                    <button class="btn btn-primary">Follow</button>
+                    {% if request.user != user %}
+                        {% if is_following == 0 %}
+                            <a class="btn btn-primary" href="{% url 'follow' user.id %}">Follow</a>
+                        {% else %}
+                            <a class="btn btn-primary" href="{% url 'unfollow' user.id %}">Unfollow</a>
+                        {% endif %}
+                    {% endif %}
                 </div>
-                <div class="text-secondary"><i class="fa fa-user-alt" style="margin-right: 3px;"></i> 76 Followers</div>
+                <div class="text-secondary"><i class="fa fa-user-alt" style="margin-right: 3px;"></i> {{ followers_count }} Followers</div>
                 <br>
                 <hr>
             {% endif %}
@@ -66,8 +72,10 @@
                     </div>
                 </div>
                 <br>
-                <h4>Performance</h4>
-                <canvas id="stats-chart" style="height:5vh; width: 15vw; position: relative;"></canvas>
+                {% if filter_by != "alltime" %}
+                    <h4>Performance</h4>
+                    <canvas id="stats-chart" style="height:5vh; width: 15vw; position: relative;"></canvas>
+                {% endif %}
                 <br>
             {% endif %}
 
@@ -107,6 +115,7 @@
         {% for activity in page_obj %}
             <div class="card" style="width: 60rem;">
                 <div class="card-body">
+                    <div class="card-text"><b>{{ activity.user }}</b></div>
                     <h5 class="card-title d-inline-block" style="margin-right: 15px;">{{ activity }}</h5>
                     <a href="{% url 'view_activity' activity.id %}" class="btn btn-outline-secondary btn-sm">Details</a>
                     {% if activity.image %}
@@ -124,31 +133,11 @@
                 </div>
             </div>
         {% endfor %}
-
-        <br>
-
-        <nav>
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                    </li>
-                {% endif %}
-                {% for page in page_obj.paginator.page_range %}
-                    <li class="page-item {% if page_obj.number == page %}active{% endif %}">
-                        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                    </li>
-                {% endfor %}
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
     </div>
 
     <script>
+        let DAY_NAMES = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
+
         let activities = JSON.parse("{{ activities_json|escapejs }}");
 
         let date_labels = [];
@@ -156,32 +145,62 @@
 
         let filter_by = "{{ filter_by }}"
 
-        let today = new Date();
-
-        let start_date, loop;
-        if (filter_by === "week") {
-            start_date = today.getDate()
-            loop = 6;
-        }
-        else if (filter_by === "month") {
-            start_date = 30;
-            loop = 30;
-        }
-
-        // Loop from last week to today
-        for (let i = loop; i >= 0; i--) {
-            let date = new Date(today.getFullYear(), today.getMonth(), start_date - i + 1);
-            let date_str = date.toISOString().split('T')[0];
-
-            let activities_on_date = activities.filter(activity => activity.fields.date === date_str);
-
-            date_labels.push(date_str);
-
-            if (activities_on_date.length > 0) {
-                distance_data.push(activities_on_date[0].fields.distance);
+        if (filter_by !== "year") {
+            let today = new Date();
+            let start_date, loop;
+            if (filter_by === "week") {
+                start_date = today.getDate()
+                loop = 6;
+            } else if (filter_by === "month") {
+                start_date = 30;
+                loop = 29;
             }
-            else {
-                distance_data.push(0);
+
+            // Loop from last week to today
+            for (let i = loop; i >= 0; i--) {
+                let date = new Date(today.getFullYear(), today.getMonth(), start_date - i + 1);
+                let date_str = date.toISOString().split('T')[0];
+
+                let activities_on_date = activities.filter(activity => activity.fields.date === date_str);
+
+                if (filter_by === "week") {
+                    let day = date.getDay();
+                    date_labels.push(DAY_NAMES[day]);
+                } else if (filter_by === "month") {
+                    date_labels.push(date.getDate() - 1);
+                }
+
+                if (activities_on_date.length > 0) {
+                    distance_data.push(activities_on_date[0].fields.distance);
+                } else {
+                    distance_data.push(0);
+                }
+            }
+        } else {
+            // Get sum of distance for each month in the year
+            let today = new Date();
+            let start_date = new Date(today.getFullYear(), 0, 1);
+            let end_date = new Date(today.getFullYear(), 11, 31);
+
+            while (start_date <= end_date) {
+                // Get sum of distance for each month and push the sum to distance_data
+                let distance_sum = 0;
+
+                for (let i = 30; i >= 0; i--) {
+                    let date = new Date(start_date.getFullYear(), start_date.getMonth(), 30 - i + 1);
+                    let date_str = date.toISOString().split('T')[0];
+
+                    let activities_on_date = activities.filter(activity => activity.fields.date === date_str);
+
+                    if (activities_on_date.length > 0) {
+                        distance_sum += activities_on_date[0].fields.distance;
+                    }
+                }
+
+                distance_data.push(distance_sum);
+                date_labels.push(start_date.toLocaleString('default', {month: 'short'}))
+
+                start_date.setMonth(start_date.getMonth() + 1);
             }
         }
 

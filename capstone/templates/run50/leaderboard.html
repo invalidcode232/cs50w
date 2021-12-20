@@ -1,0 +1,41 @@
+{% extends 'run50/layout.html' %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex">
+            <h3 class="me-auto">Leaderboard</h3>
+            <!--
+                Create dropdown with the months
+            -->
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    Filter by
+                </button>
+                <ul class="dropdown-menu">
+                    {% for month in months %}
+                        <li><a class="dropdown-item" href="?filter={{ forloop.counter }}">{{ month }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Total distance</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'profile' user.id %}"
+                           class="text-decoration-none text-dark">{{ user.username }}</a></td>
+                    <td>{{ user.total_distance }} km</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

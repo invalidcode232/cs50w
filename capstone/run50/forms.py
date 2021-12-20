@@ -19,4 +19,4 @@ class ActivityForm(forms.Form):
 class EditProfileForm(forms.Form):
     username = forms.CharField(label='Username', max_length=30, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     profile_picture = forms.ImageField(label='Profile Picture', required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
-    share_preference = forms.BooleanField(label='Share my profile with others', required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}), initial=True)
+    share_preference = forms.BooleanField(label='Share my activity with others', required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}), initial=True)
