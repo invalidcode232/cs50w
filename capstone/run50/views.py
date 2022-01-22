@@ -13,7 +13,6 @@ from django.shortcuts import render
 from django.urls import reverse
 import datetime
 import math
-import simplejson
 
 from .models import *
 from .forms import *
@@ -54,11 +53,9 @@ def index(request):
         if request.session['filter_by'] == "month":
             # Get activity from this month and sort it by date descending
             activities = Activity.objects.filter(user=request.user, date__month=datetime.date.today().month).order_by('-date')
-            # activities = Activity.objects.filter(user=request.user).filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
         elif request.session['filter_by'] == "year":
             # Get activity from this year
             activities = Activity.objects.filter(user=request.user, date__year=datetime.date.today().year).order_by('-date')
-            # activities = Activity.objects.filter(user=request.user).filter(date__gte=datetime.date.today() - datetime.timedelta(days=365))
         elif request.session['filter_by'] == "alltime":
             activities = Activity.objects.filter(user=request.user).order_by('-date')
         else:
@@ -385,7 +382,7 @@ def leaderboard(request):
 
     # Get months name for the dropdown
     months = []
-    for month in range(1, 13):
+    for month in range(1, datetime.datetime.now().month + 1):
         months.append(datetime.date.today().replace(month=month).strftime("%B"))
 
     return render(request, 'run50/leaderboard.html', {

@@ -1,0 +1,33 @@
+.mobile {
+    display: none;
+}
+
+.mobile-navbar {
+    display: none;
+}
+
+.show {
+    display: block !important;
+}
+
+.activity-card {
+    width: 65vw;
+}
+
+@media only screen and (max-width: 768px) {
+    .desktop {
+        display: none;
+    }
+
+    .mobile {
+        display: block;
+    }
+
+    .activity-card {
+        width: 90vw;
+    }
+
+    .stats-text {
+        margin-bottom: 25px;
+    }
+}

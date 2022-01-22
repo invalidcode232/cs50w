@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="95a3b894-32fa-48c4-9d8c-0d4df64f1108" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/run50/static/run50/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/cs50w.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/cs50w.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/discord.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/discord.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/capstone.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/capstone.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/discord.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run50/todo.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/run50/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/run50/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/default-profile-pic-e1513291410505.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/run50/static/default-profile-pic-e1513291410505.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/default.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/run50/static/default.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/run50/discover.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/run50/discover.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/run50/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/run50/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/run50/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/run50/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/run50/leaderboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/run50/leaderboard.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" module-name="capstone" is-module-sdk="true">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+    <option name="myUseModuleSdk" value="true" />
+    <option name="myModuleName" value="capstone" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="22dgilBku2eRfpTA0s5gEoQHu00" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="jdk.selected.JAVA_MODULE" value="jbr-11" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/capstone/settings.py" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.django.DjangoModulesConfigurable" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration name="RUN" type="Python.DjangoServer" factoryName="Django server">
+      <module name="capstone" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="capstone.settings" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\admin\AppData\Local\Programs\Python\Python310\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="95a3b894-32fa-48c4-9d8c-0d4df64f1108" name="Changes" comment="" />
+      <created>1640173013680</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1640173013680</updated>
+      <workItem from="1640173016962" duration="247000" />
+      <workItem from="1640173285926" duration="244000" />
+      <workItem from="1640173551175" duration="572000" />
+      <workItem from="1640174166896" duration="226000" />
+      <workItem from="1640174471778" duration="195000" />
+      <workItem from="1640317460110" duration="691000" />
+      <workItem from="1642814933542" duration="602000" />
+      <workItem from="1642828481273" duration="388000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

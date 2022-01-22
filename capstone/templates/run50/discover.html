@@ -10,12 +10,12 @@
         <br>
 
         {% for user in users %}
-            <div class="card w-50">
+            <div class="card" style="width: 90vw;">
                 <div class="card-body">
 {#                    <img src="{{ user.profile_picture.url }}" class="rounded-circle" width="40" height="40" alt="{{ user.username }}">#}
                     <div class="d-flex">
                         <h5 class="card-title me-auto">{{ user.username }}</h5>
-                        <a href="{% url 'profile' user.id %}" class="btn btn-primary">View Profile</a>
+                        <a href="{% url 'profile' user.id %}" class="btn btn-primary">View</a>
                     </div>
                     <p class="card-text"><i class="fa fa-envelope" style="margin-right: 5px;"></i>{{ user.email }}</p>
                 </div>

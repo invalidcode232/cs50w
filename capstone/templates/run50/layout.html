@@ -1,100 +1,146 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Run50</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/d1603c732b.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'run50/style.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-light bg-light mb-3">
-        <div class="container-fluid">
-            <div class="me-auto">
-                <a class="navbar-brand" href="{% url 'index' %}">
-                    Run50
-                </a>
-                <div class="d-inline-block">
-                    <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'feed' %}">Feed</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'index' %}">Your runs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'discover' %}">Discover</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'leaderboard' %}">Leaderboard</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <ul class="navbar-nav mb-2 mb-lg-0">
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                              <img src="{{ request.user.profile_picture.url }}" class="rounded-circle" width="30" height="30" alt="">
-                                {{ request.user.username }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{% url 'profile' request.user.id %}">Profile</a></li>
-                                <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit profile</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-                            </ul>
-                        </div>
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-3">
+    <div class="container-fluid">
+        <div class="me-auto">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                Run50
+            </a>
+            <div class="d-inline-block">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item mobile">
+                        <button class="btn" id="hamburger"><i class="fa fa-bars"></i></button>
                     </li>
-                {% else %}
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <li class="nav-item desktop">
+                        <a class="nav-link" href="{% url 'feed' %}">Feed</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    <li class="nav-item desktop">
+                        <a class="nav-link" href="{% url 'index' %}">Your runs</a>
                     </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
-    {% if error_message is not None %}
-        <div class="alert alert-danger">{{ error_message }}</div>
-    {% endif %}
-
-    {% if success_message is not None %}
-        <div class="alert alert-success">{{ success_message }}</div>
-    {% endif %}
-
-    {% block body %}
-    {% endblock %}
-
-    <br>
-
-    <div class="container">
-        {% if page_obj %}
-            <nav>
-                <ul class="pagination">
-                    {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                        </li>
-                    {% endif %}
-                    {% for page in page_obj.paginator.page_range %}
-                        <li class="page-item {% if page_obj.number == page %}active{% endif %}">
-                            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                        </li>
-                    {% endfor %}
-                    {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                        </li>
-                    {% endif %}
+                    <li class="nav-item desktop">
+                        <a class="nav-link" href="{% url 'discover' %}">Discover</a>
+                    </li>
+                    <li class="nav-item desktop">
+                        <a class="nav-link" href="{% url 'leaderboard' %}">Leaderboard</a>
+                    </li>
                 </ul>
-            </nav>
-        {% endif %}
+            </div>
+        </div>
+        <ul class="navbar-nav mb-2 mb-lg-0">
+            {% if request.user.is_authenticated %}
+                <li class="nav-item desktop">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ request.user.profile_picture.url }}" class="rounded-circle" width="30"
+                                 height="30" alt="">
+                            <span class="desktop">{{ request.user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'profile' request.user.id %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit profile</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+            {% endif %}
+        </ul>
     </div>
+</nav>
+<div class="d-flex">
+    <div style="width: 15rem;" class="mobile-navbar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'feed' %}">Feed</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Your runs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'discover' %}">Discover</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'leaderboard' %}">Leaderboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'edit_profile' %}">Edit profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Log out</a>
+            </li>
+        </ul>
+    </div>
+    <div class="container">
+        {% if error_message is not None %}
+            <div class="alert alert-danger">{{ error_message }}</div>
+        {% endif %}
+
+        {% if success_message is not None %}
+            <div class="alert alert-success">{{ success_message }}</div>
+        {% endif %}
+
+        {% block body %}
+        {% endblock %}
+
+        <br>
+
+        <div class="container">
+            {% if page_obj %}
+                <nav>
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+                        {% for page in page_obj.paginator.page_range %}
+                            <li class="page-item {% if page_obj.number == page %}active{% endif %}">
+                                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+    let hamburger = document.querySelector('#hamburger');
+    let mobileNavbar = document.querySelector('.mobile-navbar');
+
+    hamburger.addEventListener('click', () => {
+        mobileNavbar.classList.toggle('show');
+    });
+</script>
 </body>
 </html>
