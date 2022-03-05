@@ -2,26 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="95a3b894-32fa-48c4-9d8c-0d4df64f1108" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/run50/static/run50/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/cs50w.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/cs50w.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/discord.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/discord.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/capstone.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/capstone.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/discord.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run50/todo.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/run50/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/run50/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/default-profile-pic-e1513291410505.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/run50/static/default-profile-pic-e1513291410505.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/default.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/run50/static/default.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/run50/discover.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/run50/discover.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/run50/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/run50/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/run50/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/run50/layout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/run50/leaderboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/run50/leaderboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/capstone/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +82,7 @@
       <workItem from="1640174471778" duration="195000" />
       <workItem from="1640317460110" duration="691000" />
       <workItem from="1642814933542" duration="602000" />
-      <workItem from="1642828481273" duration="388000" />
+      <workItem from="1642828481273" duration="1211000" />
     </task>
     <servers />
   </component>
