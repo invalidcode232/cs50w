@@ -22,8 +22,8 @@ It also allows users to follow other users and see their activities as well as c
   - /index: Index page that displays user's activities and shows activity statistics
   - /login: Login page
   - /register: Register page
-  - /profile/user_id: Profile page of a user
-  - /activity/activity_id: Activity page that shows details of a specific activity
+  - /profile/[user_id]: Profile page of a user
+  - /activity/[activity_id]: Activity page that shows details of a specific activity
   - /leaderboard: Leaderboard page that shows the top users sorted by distance
   - /feed: Displays activities from the user and the people that the user follows
   - /discover: Lists users that the user doesn't follow, and has recent activities
